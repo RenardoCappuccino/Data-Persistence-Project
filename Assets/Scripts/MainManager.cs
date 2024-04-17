@@ -14,14 +14,26 @@ public class MainManager : MonoBehaviour
     public GameObject GameOverText;
     
     private bool m_Started = false;
-    private int m_Points;
+    public int m_Points;
     
     private bool m_GameOver = false;
+
+    public Text playerNameText;
+
+    private HighScoreManager highScoreManager;
 
     
     // Start is called before the first frame update
     void Start()
     {
+        //string playerName = PlayerPrefs.GetString("PlayerName", "Player"); 
+        
+        playerNameText.text = PlayerPrefs.GetString("PlayerName", "Player");
+        ScoreText.text = $"Player: {playerNameText.text}\nScore : {m_Points}"; // Display player name and score
+
+        highScoreManager = FindObjectOfType<HighScoreManager>();
+        
+        
         const float step = 0.6f;
         int perLine = Mathf.FloorToInt(4.0f / step);
         
@@ -66,6 +78,7 @@ public class MainManager : MonoBehaviour
     {
         m_Points += point;
         ScoreText.text = $"Score : {m_Points}";
+        highScoreManager.UpdateHighScore(m_Points, playerNameText.text);
     }
 
     public void GameOver()
